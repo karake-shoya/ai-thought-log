@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI思考ログ (MVP)
 
-## Getting Started
+大人向けの思考ログWebアプリです。1日1回のプロンプトに答えると、AIが2〜3往復の深掘り質問を行い、最後に要約・論点・次の問いを生成します。
 
-First, run the development server:
+## 機能
+- メール/パスワードで無料登録・ログイン
+- 今日の思考プロンプト表示
+- セッション開始 → チャット → 保存 → タイムライン表示
+- OpenAI APIによる質問生成と要約生成
+
+## ローカル起動
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Supabaseセットアップ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Supabaseで新しいプロジェクトを作成
+2. SQLエディタで `supabase/schema.sql` を実行
+3. Authentication で Email/Password を有効化
+4. `.env.local` を作成し、以下を設定
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_api_key
+```
 
-## Learn More
+## テーブル概要
 
-To learn more about Next.js, take a look at the following resources:
+- `profiles`: ユーザーの表示名
+- `sessions`: 思考セッション本体（要約を含む）
+- `messages`: チャットメッセージ
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 主要ルート
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/login`: ログイン
+- `/signup`: サインアップ
+- `/`: ダッシュボード
+- `/session/[id]`: セッションチャット
